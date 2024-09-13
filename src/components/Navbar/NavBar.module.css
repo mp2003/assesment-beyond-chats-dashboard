@@ -19,7 +19,6 @@
 @media (max-width: 600px) {
 	.navbar {
 		display: flex;
-		padding: 0 16px;
 		align-items: center;
 		justify-content: space-around;
 		background: #2872fa;
@@ -27,7 +26,7 @@
 		height: 64px;
 		width: 100%;
 		border: none;
-
+		padding:0;
 		box-shadow: none;
 	}
 	.navbar.logged_in {

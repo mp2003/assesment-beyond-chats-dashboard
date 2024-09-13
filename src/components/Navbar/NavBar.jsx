@@ -120,8 +120,11 @@ const useStyles2 = makeStyles((theme) => ({
 		justifyContent: "space-between",
 		alignItems: "center",
 		padding: "0 4em",
-		border:"none",
-		boxShadow:"none"
+		border: "none",
+		boxShadow: "none",
+		"@media (max-width : 600px)": {
+			padding: "0 16px",
+		},
 	},
 	mindMapStyle: {
 		minHeight: "85px",
