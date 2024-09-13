@@ -1,6 +1,6 @@
 import { withErrorBoundary } from "components/ErrorBoundary/ErrorBoundary.jsx";
 import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import PaginationItem from "@mui/material/PaginationItem";
+import "./MindMap.css";
 import makeStyles from "@mui/styles/makeStyles";
 import MenuItem from "@mui/material/MenuItem";
 import Pagination from "@mui/material/Pagination";
@@ -33,7 +34,13 @@ import { useUserContext } from "context/UserContext";
 import { DialogLoader, SmallLoader } from "components/common/NewLoader";
 import { fromUnixTime } from "date-fns";
 import ReadMoreLess from "components/common/ReadMoreLess";
-import mindMapData from "staticData/mindmap.json"
+import mindMapData from "staticData/mindmap.json";
+import { Visibility } from "@mui/icons-material";
+import zIndex from "@mui/material/styles/zIndex";
+import { useResponsiveContext } from "context/ResponsiveContext";
+import { useNavContext } from "context/NavContext";
+import BannerImage from "../../assets/images/image 1.png";
+
 const VectorData = lazy(() => import("./VectorData"));
 const CustomNoRowsOverlay = lazy(
 	() => import("components/common/CustomNoRowsOverlay")
@@ -75,8 +82,17 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: "center",
 		alignItems: "center",
 		flexDirection: "column",
-		margin: "16px auto",
-		maxWidth: 1200,
+		// margin: "16px auto",
+		// height: "500px",
+		// maxHeight: "1600px",
+		// backgroundColor: "green",
+		// maxWidth: 1200,
+		"@media (max-width: 600px)": {
+			// height: "500px",
+			justifyContent: "space-around",
+			alignItems: "center",
+			height: "600px",
+		},
 	},
 	pagination: {
 		margin: "10px auto",
@@ -89,16 +105,55 @@ const useStyles = makeStyles((theme) => ({
 	},
 	action_box: {
 		display: "flex",
-		justifyContent: "center",
+		// justifyContent: "center",
 		alignItems: "center",
 		flexWrap: "wrap",
 		gap: "0.5rem",
-		marginBottom: "0.5rem",
+		// backgroundColor: "red",
+		height: "100vh",
+		width: "100%",
+		// marginBottom: "0.5rem",
+		"@media (max-width: 600px)": {
+			height: "120vh",
+			background: "#2872FA",
+			// justifyContent: "",
+			flexDirection: "column",
+			gap: "15px",
+			width: "100%",
+			position: "relative",
+			top: "0px",
+		},
 	},
 	search_container: {
 		display: "flex",
-		flexWrap: "wrap",
-		justifyContent: "center",
+		// flexWrap: "wrap",
+		justifyContent: "space-around",
+		alignItems: "center",
+		// backgroundColor: "yellow",
+		width: "1240px",
+		height: "88px",
+		padding: "0 100px",
+		gap: "20px",
+		marginBottom: "50px",
+		"@media (max-width: 600px)": {
+			minHeight: "240px",
+			width: "344px",
+			background: "white",
+			position: "relative",
+			top: "-120px",
+			flexDirection: "column",
+			justifyContent: "space-evenly",
+			alignItems: "center",
+			gap: "10px",
+			padding: "20px 20px",
+			marginTop: "10px",
+			zIndex: "1",
+			borderRadius: "10px",
+			border: "1px solid rgba(0,0,0,0.2)",
+			boxShadow: "0px 4px 8px 0px rgba(0,0,0,0.2)",
+			marginBottom: "0",
+			// transition: "box-shadow 0.3s ease",
+		},
 	},
 }));
 
@@ -129,6 +184,9 @@ const MindMap = () => {
 	const [total, setTotal] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [hasSearched, setHasSearched] = useState(false);
+
+	const { OptionActive } = useNavContext();
+
 	const {
 		register,
 		handleSubmit,
@@ -410,78 +468,303 @@ const MindMap = () => {
 
 	return (
 		<>
+			{/* pura form element tk */}
 			<div className={classes.titleContainer}>
+				{/* sirf 3 button */}
 				<Box className={classes.action_box}>
-					<Button
-						variant="contained"
-						color="primary"
-						startIcon={<AddIcon />}
-						onClick={handleOpenAddDialog}
-					>
-						<Typography variant="h6" component="span" align="center">
-							Add Data
-						</Typography>
-					</Button>
-					<Button
-						variant="contained"
-						color="secondary"
-						startIcon={<HistoryIcon />}
-						onClick={handleOpenTasksDialog}
-					>
-						<Typography variant="h6" component="span" align="center">
-							Data Training Status
-						</Typography>
-					</Button>
-					<Button
-						variant="outlined"
-						color="secondary"
-						startIcon={<QuestionAnswerIcon />}
-						onClick={handleOpenGroundTruthDialog}
-					>
-						<Typography variant="h6" component="span" align="center">
-							Ground Truths
-						</Typography>
-					</Button>
-					{is_god ? (
-						<Button
-							variant="outlined"
-							startIcon={<InboxIcon />}
-							onClick={handleOpenBucketsDialog}
+					{isSmScreen ? (
+						<Box
+							sx={{
+								"@media (max-width: 600px)": {
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									gap: "15px",
+									// background: "red",
+									position: "absolute",
+									top: "50px",
+								},
+							}}
 						>
-							<Typography variant="h6" component="span" align="center">
-								Buckets
-							</Typography>
-						</Button>
-					) : null}
+							<Button
+								variant="contained"
+								sx={{
+									"@media (max-width:600px)": {
+										backgroundColor: "#191A23",
+										width: "250px",
+										height: "60px",
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+										borderRadius: "50px",
+									},
+								}}
+								startIcon={
+									<AddCircleIcon
+										sx={{
+											"@media (max-width:600px)": {
+												fontSize: 40,
+												minWidth: "40px",
+												height: "40px",
+											},
+										}}
+									/>
+								} // Make the AddIcon larger
+								onClick={handleOpenAddDialog}
+							>
+								<Typography
+									variant="h6"
+									component="span"
+									align="center"
+									sx={{
+										fontSize: {
+											xs: "24px", // Font size for extra-small screens (e.g., max-width: 600px)
+											sm: "12px", // Font size for small screens and above (e.g., min-width: 600px)
+										},
+									}}
+								>
+									Add Data
+								</Typography>
+							</Button>
+
+							<Button
+								variant="contained"
+								startIcon={<HistoryIcon />}
+								sx={{
+									"@media( max-width : 600px)": {
+										background: "white",
+										color: "black",
+										borderRadius: "50px",
+										width: "193px",
+									},
+								}}
+								onClick={handleOpenTasksDialog}
+							>
+								<Typography variant="h6" component="span" align="center">
+									Data Training Status
+								</Typography>
+							</Button>
+							<Button
+								variant="outlined"
+								sx={{
+									"@media( max-width : 600px)": {
+										background: "white",
+										color: "black",
+										borderRadius: "50px",
+										width: "163px",
+									},
+								}}
+								startIcon={<QuestionAnswerIcon />}
+								onClick={handleOpenGroundTruthDialog}
+							>
+								<Typography variant="h6" component="span" align="center">
+									Ground Truths
+								</Typography>
+							</Button>
+							{is_god ? (
+								<Button
+									variant="outlined"
+									startIcon={<InboxIcon />}
+									onClick={handleOpenBucketsDialog}
+								>
+									<Typography variant="h6" component="span" align="center">
+										Buckets
+									</Typography>
+								</Button>
+							) : null}
+						</Box>
+					) : (
+						<>
+							{/* for pc */}
+							<Box
+								sx={{
+									display: "grid",
+									gridTemplateColumns: "1fr 1fr",
+
+									gap: "20px",
+									width: "100%",
+									margin: "30px 70px 70px 80px",
+									alignItems: "start",
+									justifyContent: "center",
+									minHeight: "515px",
+									// backgroundColor: "red",
+								}}
+							>
+								<Box
+									sx={{
+										// background: "green",
+										display: "flex",
+										flexDirection: "column",
+										gap: "50px",
+									}}
+								>
+									<Typography
+										style={{
+											fontSize: "70px",
+											fontWeight: "medium",
+											maxWidth: "631px",
+											lineHeight: "95px",
+										}}
+									>
+										Mastering the Core of Chatbot Intelligence
+									</Typography>
+									<Typography
+										style={{
+											fontSize: "19px",
+											maxWidth: "498px",
+											minHeight: "84px",
+											textAlign: "left",
+										}}
+									>
+										{OptionActive?.explanation}
+									</Typography>
+									<Box
+										style={{
+											display: "flex",
+											// justifyContent: "space-between",
+											gap: "20px",
+										}}
+									>
+										<Button
+											variant="contained"
+											startIcon={<AddCircleIcon />}
+											onClick={handleOpenAddDialog}
+											style={{
+												width: "150px",
+											}}
+										>
+											Add Data
+										</Button>
+										<Button
+											variant="contained"
+											startIcon={<HistoryIcon />}
+											onClick={handleOpenTasksDialog}
+											style={{
+												background: "white",
+												color: "black",
+												fontWeight: "bold",
+												border: "2px solid #2871fab0 ",
+
+												// width:"150px",
+											}}
+										>
+											Data Training Status
+										</Button>
+										<Button
+											variant="contained"
+											startIcon={<QuestionAnswerIcon />}
+											onClick={handleOpenGroundTruthDialog}
+											style={{
+												background: "white",
+												color: "black",
+												fontWeight: "bold",
+												border: "2px solid #2871faae ",
+												"&:hover": {
+													boxShadow: " 0 0 10px 1px #2872FA",
+												},
+												// width:"150px",
+											}}
+										>
+											Ground Truths
+										</Button>
+										{is_god ? (
+											<Button
+												variant="contained"
+												startIcon={<InboxIcon />}
+												onClick={handleOpenBucketsDialog}
+											>
+												Buckets
+											</Button>
+										) : null}
+									</Box>
+								</Box>
+								<Box sx={{ margin: "0 auto" }}>
+									{/* <BannerImage /> */}
+									<img
+										src={BannerImage}
+										alt="Banner Image"
+										style={{
+											width: "100%",
+											height: "100%",
+										}}
+									></img>
+								</Box>
+							</Box>
+						</>
+					)}
 				</Box>
-				<hr
-					style={{
-						width: "80%",
-						margin: "10px 0",
-						border: "0.01rem solid grey",
-					}}
-				/>
+
 				<form
 					onSubmit={handleSubmit(searchVectors)}
 					className={classes.search_container}
 				>
 					<TextField
 						label="Search"
-						variant="outlined"
 						error={errors?.q?.type}
 						helperText={errors?.q?.message}
-						sx={{ mt: 1 }}
 						size="small"
+						sx={
+							!isSmScreen && {
+								"& .MuiInputLabel-root": {
+									left: "10%", // Moves the label horizontally to the center
+									transform: "translate(-50%, 18px) scale(1)", // Centers it and adjusts the label position
+									transition: "transform 0.2s ease-in-out", // Smooth transition for label movement
+								},
+								"& .MuiInputLabel-shrink": {
+									transform: "translate(-80%, -10px) scale(0.75)", // Adjusts position when label is shrunk
+								},
+								"& .MuiOutlinedInput-root": {
+									"& input": {
+										padding: "18px 14px", // Adjust padding inside input
+									},
+									"& fieldset": {
+										borderRadius: "20px", // Rounded corners
+									},
+								},
+							}
+						}
+						InputProps={
+							!isSmScreen
+								? {
+										style: {
+											width: "685px",
+											height: "67px",
+										},
+									}
+								: {
+										style: {
+											width: "300px",
+											height: "40px",
+										},
+									}
+						}
 						{...register("q", {
 							required: "Required",
 						})}
 					/>
+
 					<TextField
 						select
 						label="Results"
-            defaultValue={3}
-            sx={{ m: 1, minWidth: 120 }}
-            size="small"
+						defaultValue={3}
+						sx={{}}
+						InputProps={
+							!isSmScreen
+								? {
+										style: {
+											// border: "2px solid black", // Regular border
+											width: "180px",
+											height: "67px",
+											borderRadius: "20px",
+										},
+									}
+								: {
+										style: {
+											width: "300px",
+											height: "40px",
+										},
+									}
+						}
 						{...register("numResults")}
 					>
 						{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 50].map((value) => (
@@ -491,7 +774,23 @@ const MindMap = () => {
 						))}
 					</TextField>
 
-					<Button type="submit" variant="contained" sx={{ m: 1 }}>
+					<Button
+						type="submit"
+						variant="contained"
+						sx={
+							!isSmScreen
+								? {
+										width: "137px",
+										background: "#2872FA",
+										height: "60px",
+										borderRadius: "20px",
+									}
+								: {
+										width: "300px",
+										height: "40px",
+									}
+						}
+					>
 						Search
 					</Button>
 					{hasSearched ? (
@@ -507,31 +806,71 @@ const MindMap = () => {
 				</form>
 			</div>
 
-			<Box sx={{ padding: "10px", borderRadius: "8px", height: "100%" }}>
+			<Box
+				sx={{
+					"@media (max-width:600px)": {
+						padding: "10px",
+						borderRadius: "8px",
+						height: "100%",
+						// background: "blue",
+						position: "relative",
+						top: "-85px",
+					},
+				}}
+			>
 				{isSmScreen ? (
 					loading ? (
 						<SmallLoader />
 					) : (
 						<Suspense fallback={<SmallLoader />}>
-							<Box>
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									gap: "20px",
+									padding: "0 10px",
+								}}
+							>
 								{data.map((item) => (
-									<VectorData
+									<div
 										key={item.vector_id}
-										data={item}
-										handleOpenEditDialog={handleOpenEditDialog}
-										handleDelete={handleDelete}
-									/>
+										style={{
+											border: "1px solid rgba(0,0,0,0.2)",
+											boxShadow: "0px 4px 8px 0px rgba(0,0,0,0.2)",
+											borderRadius: "10px",
+										}}
+									>
+										<VectorData
+											data={item}
+											handleOpenEditDialog={handleOpenEditDialog}
+											handleDelete={handleDelete}
+										/>
+									</div>
 								))}
 							</Box>
 						</Suspense>
 					)
 				) : (
-					<Box sx={{ width: "100%", minWidth: "960px" }}>
+					<Box
+						sx={{
+							width: "100%",
+							minWidth: "960px",
+							padding: "0 60px",
+							borderRadius: "25px",
+						}}
+						style={{ borderRadius: "25px" }}
+					>
 						<DataGrid
 							rows={data}
 							columns={columns}
 							loading={loading}
 							autoHeight
+							sx={{
+								background: "#DAE1EC",
+								borderRadius: "25px",
+								padding: "10px 25px",
+								borderBottom: "1px solid black",
+							}}
 							getRowId={getRowId}
 							slots={{
 								noRowsOverlay: CustomNoRowsOverlay,
@@ -553,11 +892,12 @@ const MindMap = () => {
 					</Box>
 				)}
 
-				<Stack spacing={2} alignItems="center" my={1}>
+				<Stack spacing={2} alignItems="center" my={2}>
 					<Pagination
 						page={page}
 						count={count}
-						sx={{ m: "10px auto" }}
+						sx={{ margin: "32px 0", padding: "16px 0" }}
+						// style={{backgroundColor: "black"}}
 						color="primary"
 						renderItem={(item) => {
 							const searchParams = new URLSearchParams(location.search);

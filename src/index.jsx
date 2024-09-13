@@ -18,6 +18,7 @@ import { ResponsiveProvider } from "context/ResponsiveContext.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./toast.css";
+import { NavProvider } from "context/NavContext.jsx";
 
 const theme = createTheme({
 	components: {
@@ -229,25 +230,27 @@ const root = createRoot(document.getElementById("root"));
 
 root.render(
 	<BrowserRouter>
-		<Provider store={store}>
-			<StyledEngineProvider injectFirst>
-				<ThemeProvider theme={theme}>
-					<UserProvider>
-						<OrgProvider>
-							<PlanProvider>
-								<NotificationChannelProvider>
-									<ResponsiveProvider>
-										<ErrorBoundary component="routes">
-											<Routes />
-										</ErrorBoundary>
-									</ResponsiveProvider>
-								</NotificationChannelProvider>
-							</PlanProvider>
-						</OrgProvider>
-					</UserProvider>
-				</ThemeProvider>
-			</StyledEngineProvider>
-		</Provider>
+		<NavProvider>
+			<Provider store={store}>
+				<StyledEngineProvider injectFirst>
+					<ThemeProvider theme={theme}>
+						<UserProvider>
+							<OrgProvider>
+								<PlanProvider>
+									<NotificationChannelProvider>
+										<ResponsiveProvider>
+											<ErrorBoundary component="routes">
+												<Routes />
+											</ErrorBoundary>
+										</ResponsiveProvider>
+									</NotificationChannelProvider>
+								</PlanProvider>
+							</OrgProvider>
+						</UserProvider>
+					</ThemeProvider>
+				</StyledEngineProvider>
+			</Provider>
+		</NavProvider>
 		<ToastContainer
 			position="bottom-right"
 			autoClose={5000}

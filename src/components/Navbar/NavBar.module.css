@@ -1,9 +1,12 @@
 .navbar {
-	padding: 0 20px;
+	/* padding: 0 10px; */
 	background: #ffffff;
 	box-shadow: 0 0 10px 1px #0003;
 	border-bottom: 1px solid #0003;
 	height: 65px;
+	display: flex;
+	justify-content: space-around;
+	padding: 0 32px;
 }
 .navbar.logged_in {
 	/* 100vw - width of small left drawer, also see LeftDrawer in Routes */
@@ -15,11 +18,31 @@
 }
 @media (max-width: 600px) {
 	.navbar {
-		height: 56px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #2872fa;
+		color: #ffffff;
+		height: 64px;
+		width: 100%;
+		border: none;
+		box-shadow: none;
 	}
 	.navbar.logged_in {
 		/* 100vw - width of small left drawer, also see LeftDrawer in Routes */
 		width: calc(100vw - 56px);
 		left: 56px;
 	}
+}
+
+.ToolbarMindMap {
+	/* background: blue; */
+}
+
+.mindMapStyle {
+	/* background: red; */
+	height: "85px";
+	display: flex;
+	justify-content: center;
+	box-shadow: none;
 }

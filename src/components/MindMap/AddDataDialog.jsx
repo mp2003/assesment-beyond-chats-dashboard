@@ -416,8 +416,8 @@ const AddDataDialog = ({ openAddDialog, setOpenAddDialog, setData }) => {
 						fullWidth
 						{...register("bucket_id")}
 						label="Select Bucket"
-            defaultValue=""
-            helperText="Bucket in which this data will be added"
+						defaultValue=""
+						helperText="Bucket in which this data will be added"
 					>
 						<MenuItem value="">No Bucket</MenuItem>
 						{buckets.map((bucket) => (
@@ -431,8 +431,8 @@ const AddDataDialog = ({ openAddDialog, setOpenAddDialog, setData }) => {
 						select
 						{...register("action_id")}
 						label="Business Action"
-            defaultValue={""}
-            helperText="Action to use when this vector is used for an answer"
+						defaultValue={""}
+						helperText="Action to use when this vector is used for an answer"
 					>
 						<MenuItem value="">No Action</MenuItem>
 						{businessActions.map((businessAction) => (

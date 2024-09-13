@@ -10,7 +10,7 @@ import { Tooltip, styled } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import MuiDrawer from "@mui/material/Drawer";
-
+import { useNavContext } from "context/NavContext";
 const DrawerHeader = styled("div")(({ theme }) => ({
 	display: "flex",
 	alignItems: "center",
@@ -62,6 +62,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const LeftDrawer = ({ isOpened, toggleLeftNav, navOptions }) => {
+	const { OptionActive } = useNavContext();
+	console.log(OptionActive);
+
 	return (
 		<Drawer
 			variant="permanent"
@@ -72,15 +75,41 @@ const LeftDrawer = ({ isOpened, toggleLeftNav, navOptions }) => {
 			<Tooltip
 				title={isOpened ? "Close Left Drawer" : "Open Left Drawer"}
 				arrow
+				// here is the menu
 			>
-				<DrawerHeader>
+				<DrawerHeader
+					sx={
+						OptionActive?.tourHeading === "Chatbot Mind Map" && {
+							height: "83px",
+							// backgroundColor: "red",
+							fontSize: "25px",
+						}
+					}
+				>
 					<IconButton onClick={toggleLeftNav}>
 						{isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
 					</IconButton>
 				</DrawerHeader>
 			</Tooltip>
 			<Divider />
-			<List>
+			<List
+				sx={
+					OptionActive?.tourHeading === "Chatbot Mind Map" && {
+						// backgroundColor: "red",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						gap: "0.5rem",
+						marginTop: "8rem",
+						fontSize: "20px",
+						border: "none",
+						// padding:"1em",
+						justifyContent: "center",
+
+						// minWidth: "100px"
+					}
+				}
+			>
 				{navOptions.map(({ title, Icon, onClick, isActive }, index) => (
 					<Tooltip
 						title={isOpened ? "" : title}

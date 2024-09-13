@@ -1,6 +1,6 @@
 // import ClickAwayListener from "@mui/material/ClickAwayListener";
 import makeStyles from "@mui/styles/makeStyles";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { withRouter, useHistory, matchPath } from "react-router-dom";
 // import "../../assets/css/User/Navbar/dashboardNavBar.css";
 import styles from "./NavBar.module.css";
@@ -27,11 +27,13 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import InfoIcon from "@mui/icons-material/Info";
+import EditLocationAltOutlinedIcon from "@mui/icons-material/EditLocationAltOutlined";
 import { useUserContext } from "context/UserContext";
 import { useOrgContext } from "context/OrgContext";
 import MetaHelmet from "components/common/MetaHelmet";
 import { useResponsiveContext } from "context/ResponsiveContext";
-
+import { ClassNames } from "@emotion/react";
+import { useNavContext } from "context/NavContext";
 const useStyles2 = makeStyles((theme) => ({
 	backdrop: {
 		zIndex: theme.zIndex.drawer + 1,
@@ -43,16 +45,19 @@ const useStyles2 = makeStyles((theme) => ({
 	org: {
 		display: "flex",
 		alignItems: "center",
-		padding: "0.5rem 1rem",
+		// padding: "0.5rem 1rem",
 		cursor: "pointer",
 		color: "var(--primary)",
 		borderRadius: 8,
+		// border: "1px solid green",
 		"&:hover": {
 			backgroundColor: "#f6f2f2",
 		},
 	},
 	orgName: {
-		color: "var(--color5)",
+		color: "",
+		position: "absolute",
+		right: "30px",
 	},
 	radio: {
 		color: "var(--primary)",
@@ -78,17 +83,18 @@ const useStyles2 = makeStyles((theme) => ({
 		width: "180px",
 	},
 	orgBtn: {
-		border: "none",
+		// border: "1px solid red",
 		outline: "none",
-		color: "var(--primary)",
-		borderRadius: "0.5rem",
+		color: "white",
+		borderRadius: "0rem",
+		// right:" 55px !important",
 		"&:hover": {
 			backgroundColor: "transparent",
 		},
 	},
 	orgSelector: {
 		top: "51px !important",
-		right: "65px !important",
+		right: "45px !important",
 		maxHeight: "80vh",
 		overflowY: "scroll",
 	},
@@ -107,6 +113,19 @@ const useStyles2 = makeStyles((theme) => ({
 	tutorialStart: {
 		cursor: "pointer",
 	},
+	ToolbarMindMap: {
+		// background: "blue",
+
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+		padding: "0 4em",
+		border:"none",
+		boxShadow:"none"
+	},
+	mindMapStyle: {
+		minHeight: "85px",
+	},
 }));
 
 const NavBar = (props) => {
@@ -116,6 +135,7 @@ const NavBar = (props) => {
 	const [anchorElUser, setAnchorElUser] = React.useState(null);
 	const [anchorElOrg, setAnchorElOrg] = React.useState(null);
 	const { isMobile } = useResponsiveContext();
+	const { OptionActive, setOptionActive } = useNavContext();
 
 	const {
 		user: { access_token, email, name, is_god },
@@ -147,6 +167,10 @@ const NavBar = (props) => {
 	// 	setIsOrgSelectorOpened(false);
 	// };
 
+	const handleOptionChange = (newOption) => {
+		setOptionActive(newOption);
+	};
+
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
@@ -165,7 +189,19 @@ const NavBar = (props) => {
 	const activeOption = props.navOptions.find(
 		(option) => option.isActive === true
 	);
+	useEffect(() => {
+		if (activeOption && activeOption.tourHeading) {
+			setOptionActive(activeOption);
+			// console.log("Setting OptionActive to:", activeOption.tourHeading);
+		} else {
+			console.log("No activeOption found");
+		}
+	}, [activeOption, setOptionActive]);
 
+	// Log OptionActive after it updates
+	// useEffect(() => {
+	// 	// console.log("Updated OptionActive:", OptionActive);
+	// }, [OptionActive]);
 	return (
 		<>
 			<MetaHelmet
@@ -176,31 +212,85 @@ const NavBar = (props) => {
 				position="fixed"
 				className={classNames(styles.navbar, {
 					[styles.logged_in]: access_token && !isMobile,
+					[styles.mindMapStyle]:
+						activeOption?.tourHeading === "Chatbot Mind Map",
 				})}
+				// sx={{
+				// 	...(activeOption?.tourHeading === "Chatbot Mind Map" && {
+				// 		backgroundColor: "blue",
+				// 		border: "1px solid #ccc",
+				// 		marginTop: "30px",
+				// 	}),
+				// }}
+				style={{
+					...(activeOption?.tourHeading === "Chatbot Mind Map" && {
+						// backgroundColor: "blue",
+						border: "1px solid #ccc",
+						minHeight: "85px",
+						// marginTop: "30px",
+					}),
+				}}
 			>
 				<Toolbar
 					disableGutters
-					sx={{ display: "flex", justifyContent: "space-between" }}
+					sx={{
+						...(isMobile && {
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							width: "100%",
+							padding: "0 8px",
+							gap: "10px",
+						}),
+					}}
+					className={
+						activeOption?.tourHeading === "Chatbot Mind Map" &&
+						classes.ToolbarMindMap
+					}
 				>
 					{access_token && isMobile ? (
 						<Box>
-							<IconButton onClick={props.toggleLeftNav}>
-								<MenuIcon />
+							<IconButton
+								onClick={props.toggleLeftNav}
+								sx={{
+									// Default styles that will apply for mobile screens
+									"@media (max-width: 600px)": {
+										color: "white",
+										fontSize: "28px",
+									},
+								}}
+								className={
+									activeOption?.tourHeading === "Chatbot Mind Map" &&
+									classes.MenuIcon
+								}
+							>
+								<MenuIcon style={{ fontSize: "28px" }} />
 							</IconButton>
 						</Box>
 					) : null}
 					<Box>
 						<Typography
-							variant="h3"
+							variant="h1"
 							noWrap
 							sx={{
 								color: "black",
 								display: "flex",
 								alignItems: "center",
 								gap: 1,
+								"@media (max-width: 600px)": {
+									color: "white",
+									fontSize: "18px",
+								},
+								...(activeOption?.tourHeading === "Chatbot Mind Map" && {
+									fontSize: "38px",
+									fontWeight: "bold",
+									textTransform: "uppercase",
+								}),
+								// fontSize: "28px",
 							}}
 						>
 							{activeOption?.tourHeading ?? "BeyondChats"}
+							{/* this is the content of explanation  */}
 							{activeOption?.explanation ? (
 								<Tooltip title={activeOption?.explanation}>
 									<InfoIcon
@@ -208,10 +298,10 @@ const NavBar = (props) => {
 											display: {
 												xs: "inline-block",
 												md: "none",
-												fontSize: "16px",
+												fontSize: "18px",
 											},
 										}}
-										color="primary"
+										color=""
 									/>
 								</Tooltip>
 							) : (
@@ -224,6 +314,9 @@ const NavBar = (props) => {
 								color: "black",
 								fontWeight: 400,
 								display: { xs: "none", md: "block", maxWidth: "500px" },
+								...(activeOption?.tourHeading === "Chatbot Mind Map" && {
+									display: "none",
+								}),
 							}}
 						>
 							{activeOption?.explanation}
@@ -266,13 +359,14 @@ const NavBar = (props) => {
 										}}
 										endIcon={<KeyboardArrowDown />}
 										onClick={handleOpenOrgMenu}
+										style={{ position: "relative", right: "0px" }}
 									>
 										<Typography
 											variant="h5"
 											component="div"
 											className={classes.orgName}
 										>
-											{currOrgName ?? "Select Org"}
+											{currOrgName ?? <EditLocationAltOutlinedIcon />}
 										</Typography>
 										{/* <KeyboardArrowDown
 											classes={{
@@ -284,7 +378,7 @@ const NavBar = (props) => {
 								{!isMobile ? (
 									<>
 										<Menu
-											sx={{ mt: "45px" }}
+											sx={{ mt: "45px", color: "white" }}
 											id="menu-appbar"
 											anchorEl={anchorElOrg}
 											anchorOrigin={{
