@@ -19,13 +19,15 @@
 @media (max-width: 600px) {
 	.navbar {
 		display: flex;
+		padding: 0 16px;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-around;
 		background: #2872fa;
 		color: #ffffff;
 		height: 64px;
 		width: 100%;
 		border: none;
+
 		box-shadow: none;
 	}
 	.navbar.logged_in {
