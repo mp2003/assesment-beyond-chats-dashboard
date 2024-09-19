@@ -54,7 +54,7 @@
 	},
 	"scripts": {
 		"start": "dotenv -e .env.production react-scripts start",
-		"build": "GENERATE_SOURCEMAP=false dotenv -e .env.production react-scripts build",
+		"build": "cross-env GENERATE_SOURCEMAP=false dotenv -e .env.production react-scripts build",
 		"build:push": "npm run build && dotenv -e .env.production node netlifyDeploy.js",
 		"start:dev": "dotenv -e .env.development react-scripts start",
 		"build:dev": "dotenv -e .env.development react-scripts build",
